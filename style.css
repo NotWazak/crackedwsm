@@ -1,0 +1,32 @@
+.2_2 { 
+	overflow:hidden;
+}
+.e2_2 { 
+	background-color:rgba(255, 255, 255, 1);
+	width:1440px;
+	height:1024px;
+	position:absolute;
+}
+.e2_4 { 
+	width:1920px;
+	height:1080px;
+	position:absolute;
+	left:-240px;
+	top:-28px;
+	background-image:url(images/image_1.png);
+	background-repeat:no-repeat;
+	background-size:cover;
+}
+.e2_5 { 
+	box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
+	color:rgba(255, 255, 255, 1);
+	width:441px;
+	height:110px;
+	position:absolute;
+	left:500px;
+	top:457px;
+	font-family:Akira Expanded;
+	text-align:left;
+	font-size:96px;
+	letter-spacing:0;
+}
