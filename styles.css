@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Akira Expanded";
+    src: url("https://crackedwsm.pro/akira_bold.otf");
+}
+
 body {
 	margin: 0;
 }
