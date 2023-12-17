@@ -20,13 +20,13 @@
       var link = document.getElementById('link');
       var data = new FormData();
       data.append('content', content);
-      fetch('https://yourdomain.com/generate.php', {
+      fetch('https://crackedwsm.pro/generate.php', {
         method: 'POST',
         body: data
       })
       .then(response => response.json())
       .then(data => {
-        link.innerHTML = 'Your link: <a href="https://yourdomain.com/' + data.id + '">https://yourdomain.com/' + data.id + '</a>';
+        link.innerHTML = 'Your link: <a href="https://crackedwsm.pro/' + data.id + '">https://crackedwsm.pro/' + data.id + '</a>';
       })
       .catch((error) => {
         console.error('Error:', error);
