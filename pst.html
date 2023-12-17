@@ -57,21 +57,23 @@
     </div>
 
     <script>
-        function createPaste() {
+        async function createPaste() {
             var pasteInput = document.getElementById('pasteInput').value;
             var pasteResult = document.getElementById('pasteResult');
 
-            // Enregistre les données localement (pour cet exemple)
-            localStorage.setItem('pastebin_data', pasteInput);
+            // Utilisation de jsonplaceholder.typicode.com comme exemple de service externe
+            const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                body: JSON.stringify({ title: 'Pastebin', body: pasteInput }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
 
-            // Met à jour la div #pasteResult avec le lien du pastebin
-            pasteResult.innerHTML = '<a href="javascript:viewPaste()">Voir le Pastebin</a>';
-        }
+            const data = await response.json();
 
-        function viewPaste() {
-            // Récupère les données enregistrées localement (pour cet exemple)
-            var pastebinData = localStorage.getItem('pastebin_data');
-            alert('Contenu du Pastebin :\n\n' + pastebinData);
+            // Affiche le lien du pastebin créé
+            pasteResult.innerHTML = `<a href="https://jsonplaceholder.typicode.com/posts/${data.id}" target="_blank">Voir le Pastebin</a>`;
         }
     </script>
 </body>
