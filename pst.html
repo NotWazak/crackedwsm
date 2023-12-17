@@ -5,42 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Pastebin</title>
     <style>
-        /* ... (styles inchangés) */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #pasteResult {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <div id="pastebin-container">
-        <h2>Créer un Paste</h2>
-        <textarea id="paste-input" placeholder="Collez votre texte ici..."></textarea>
-        <button id="create-button" onclick="createPaste()">Créer</button>
-        <div id="paste-link"></div>
+    <div class="container">
+        <textarea id="pasteInput" placeholder="Colle ton code ici..."></textarea>
+        <button onclick="createPaste()">Créer Pastebin</button>
+        <div id="pasteResult"></div>
     </div>
 
     <script>
-        async function createPaste() {
-            const content = document.getElementById('paste-input').value;
+        function createPaste() {
+            var pasteInput = document.getElementById('pasteInput').value;
+            var pasteResult = document.getElementById('pasteResult');
 
-            try {
-                const response = await fetch('/api/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ content }),
-                });
+            // Enregistre les données localement (pour cet exemple)
+            localStorage.setItem('pastebin_data', pasteInput);
 
-                if (!response.ok) {
-                    throw new Error('Une erreur est survenue lors de la création du pastebin.');
-                }
+            // Met à jour la div #pasteResult avec le lien du pastebin
+            pasteResult.innerHTML = '<a href="javascript:viewPaste()">Voir le Pastebin</a>';
+        }
 
-                const data = await response.json();
-                const pasteLink = data.link;
-
-                document.getElementById('paste-link').innerHTML = 'Lien du Paste: <a href="' + pasteLink + '" target="_blank">' + pasteLink + '</a>';
-            } catch (error) {
-                console.error(error);
-                document.getElementById('paste-link').innerHTML = 'Une erreur est survenue.';
-            }
+        function viewPaste() {
+            // Récupère les données enregistrées localement (pour cet exemple)
+            var pastebinData = localStorage.getItem('pastebin_data');
+            alert('Contenu du Pastebin :\n\n' + pastebinData);
         }
     </script>
 </body>
