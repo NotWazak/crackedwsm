@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Pastebin</title>
+    <style>
+        /* ... (styles inchangés) */
+    </style>
+</head>
+<body>
+    <div id="pastebin-container">
+        <h2>Créer un Paste</h2>
+        <textarea id="paste-input" placeholder="Collez votre texte ici..."></textarea>
+        <button id="create-button" onclick="createPaste()">Créer</button>
+        <div id="paste-link"></div>
+    </div>
+
+    <script>
+        async function createPaste() {
+            const content = document.getElementById('paste-input').value;
+
+            try {
+                const response = await fetch('/api/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Une erreur est survenue lors de la création du pastebin.');
+                }
+
+                const data = await response.json();
+                const pasteLink = data.link;
+
+                document.getElementById('paste-link').innerHTML = 'Lien du Paste: <a href="' + pasteLink + '" target="_blank">' + pasteLink + '</a>';
+            } catch (error) {
+                console.error(error);
+                document.getElementById('paste-link').innerHTML = 'Une erreur est survenue.';
+            }
+        }
+    </script>
+</body>
+</html>
