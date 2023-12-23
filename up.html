@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Uploader</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #00f;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border: none;
+        }
+
+        button {
+            background-color: #00f;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #progress {
+            margin-top: 10px;
+            color: #00f;
+        }
+
+        #result {
+            color: #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Uploader</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput" required>
+        <button type="button" onclick="uploadFile()">Upload</button>
+    </form>
+    <div id="progress"></div>
+    <div id="result"></div>
+
+    <script>
+        function uploadFile() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('file', file);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', window.location.href, true);
+
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    var percentComplete = (e.loaded / e.total) * 100;
+                    document.getElementById('progress').innerHTML = 'Uploading: ' + percentComplete.toFixed(2) + '%';
+                }
+            };
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var resultDiv = document.getElementById('result');
+                        resultDiv.innerHTML = 'File uploaded successfully!<br>';
+
+                        // Parse the response to get the personalized link
+                        var response = JSON.parse(xhr.responseText);
+                        var personalizedLink = window.location.origin + '/uploads/' + response.filename;
+                        resultDiv.innerHTML += 'Personalized Link: <a href="' + personalizedLink + '" target="_blank">' + personalizedLink + '</a>';
+                    } else {
+                        document.getElementById('result').innerHTML = 'Error uploading file.';
+                    }
+                }
+            };
+
+            xhr.send(formData);
+        }
+    </script>
+
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $targetDir = "uploads/";
+        $targetFile = $targetDir . basename($_FILES['file']['name']);
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFile)) {
+            $response = ['filename' => basename($targetFile)];
+            echo '<script>document.getElementById("result").innerHTML = "File uploaded successfully!<br>Personalized Link: <a href=\"' . $_SERVER['REQUEST_URI'] . 'uploads/' . $response['filename'] . '\" target=\"_blank\">' . $_SERVER['REQUEST_URI'] . 'uploads/' . $response['filename'] . '</a>";</script>';
+        } else {
+            echo '<script>document.getElementById("result").innerHTML = "Error uploading file.";</script>';
+        }
+    }
+    ?>
+</body>
+</html>
